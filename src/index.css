@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #0a0a0a;
+  --color-coal: #171717;
+  --color-graphite: #262626;
+  --color-slatey: #525252;
+  --color-mist: #a3a3a3;
+  --color-fog: #e5e5e5;
+  --color-cloud: #f5f5f5;
+  --color-paper: #ffffff;
+
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-pulse-soft: pulse-soft 3.2s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes pulse-soft {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.45;
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: #0a0a0a;
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid #0a0a0a;
+    outline-offset: 3px;
+  }
+
+  .img-gray {
+    filter: grayscale(1) contrast(1.08);
+  }
+}
+
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10;
+  }
+
+  .label-caps {
+    @apply text-[11px] font-semibold uppercase tracking-[0.28em] text-slatey;
+  }
+
+  .label-caps-light {
+    @apply text-[11px] font-semibold uppercase tracking-[0.28em] text-mist;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-ink px-6 py-3.5 text-sm font-semibold tracking-wide text-paper transition-all duration-300 hover:bg-graphite hover:tracking-[0.06em] disabled:opacity-40;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 border border-ink bg-transparent px-6 py-3.5 text-sm font-semibold tracking-wide text-ink transition-all duration-300 hover:bg-ink hover:text-paper;
+  }
+
+  .btn-light {
+    @apply inline-flex items-center justify-center gap-2 border border-paper/40 bg-transparent px-6 py-3.5 text-sm font-semibold tracking-wide text-paper transition-all duration-300 hover:bg-paper hover:text-ink;
+  }
+
+  .card {
+    @apply border border-fog bg-paper transition-all duration-300 hover:border-ink;
+  }
+
+  .field {
+    @apply w-full border border-fog bg-paper px-4 py-3.5 text-sm text-ink placeholder:text-mist transition-colors duration-200 focus:border-ink focus:outline-none;
+  }
+
+  .prose-tujo {
+    @apply text-base leading-relaxed text-slatey;
+  }
+
+  .prose-tujo h2 {
+    @apply mb-4 mt-12 text-2xl font-bold tracking-tight text-ink;
+  }
+
+  .prose-tujo h3 {
+    @apply mb-3 mt-8 text-lg font-bold tracking-tight text-ink;
+  }
+
+  .prose-tujo p {
+    @apply mb-5;
+  }
+
+  .prose-tujo ul {
+    @apply mb-5 list-disc space-y-2 pl-5;
+  }
+
+  .prose-tujo strong {
+    @apply font-semibold text-ink;
+  }
+}
