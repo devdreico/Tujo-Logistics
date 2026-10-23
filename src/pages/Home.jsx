@@ -5,8 +5,9 @@ import Reveal, { SectionLabel } from '../components/Reveal'
 import StatsBar from '../components/StatsBar'
 import UnitCard from '../components/UnitCard'
 import CTABanner from '../components/CTABanner'
-import usePageTitle from '../hooks/usePageTitle'
-import { useLang } from '../i18n/LangContext'
+import JsonLd, { organizationLd, websiteLd } from '../components/JsonLd'
+import usePageMeta from '../hooks/usePageMeta'
+import { ui, useLang } from '../i18n/LangContext'
 import { images, units } from '../data/units'
 
 const pillars = [
@@ -36,12 +37,33 @@ const pillars = [
   },
 ]
 
+const marqueeWords = [
+  { es: 'MEHD TUJO', en: 'MEHD TUJO' },
+  { es: 'WHOLESALES', en: 'WHOLESALES' },
+  { es: 'TUJO GO', en: 'TUJO GO' },
+  { es: 'TUJO FOOD', en: 'TUJO FOOD' },
+  { es: 'INTERNATIONAL', en: 'INTERNATIONAL' },
+  { es: 'CADENA DE FRÍO', en: 'COLD CHAIN' },
+  { es: 'ÚLTIMA MILLA', en: 'LAST MILE' },
+  { es: 'BODEGAS', en: 'WAREHOUSES' },
+  { es: 'PUERTOS', en: 'PORTS' },
+  { es: 'TRUEQUE', en: 'BARTER' },
+]
+
 export default function Home() {
   const { L } = useLang()
-  usePageTitle(null)
+  usePageMeta({
+    title: null,
+    description:
+      'Tujo Logistics: coordinación logística desde Bogotá. Sistemas de organización compleja, IA y ciencia para entornos caóticos. MEHD Tujo, Wholesales, Tujo Go, Tujo Food, International.',
+    path: '/',
+  })
 
   return (
     <>
+      <JsonLd data={organizationLd} />
+      <JsonLd data={websiteLd} />
+
       <HeroSection
         tall
         image={images.warehouse}
@@ -51,7 +73,7 @@ export default function Home() {
           es: 'Creamos sistemas y estrategias de organización compleja aplicables a entornos caóticos reales. Los impulsamos con IA, ciencia y tecnología, y generamos procesos logísticos eficientes en todas las ramas de la logística.',
           en: 'We build complex organization systems and strategies for real chaotic environments. Powered by AI, science and technology, we generate efficient logistics processes across every branch of logistics.',
         }}
-        primaryCta={{ to: '/servicios', label: { es: 'Ver servicios', en: 'View services' } }}
+        primaryCta={{ to: '/servicios', label: ui.common.viewServices }}
         secondaryCta={{ to: '/contacto', label: { es: 'Contactar', en: 'Contact' } }}
       />
 
@@ -59,12 +81,12 @@ export default function Home() {
         items={[
           { value: 5, label: { es: 'Unidades de negocio', en: 'Business units' } },
           { value: 24, suffix: '/7', label: { es: 'Operación coordinada', en: 'Coordinated operation' } },
-          { value: 100, suffix: '%', label: { es: 'Enfoque en eficiencia', en: 'Efficiency focus' } },
           { value: 1, label: { es: 'Ecosistema logístico', en: 'Logistics ecosystem' } },
+          { value: 5, label: { es: 'Ramas cubiertas', en: 'Branches covered' } },
         ]}
       />
 
-      <section className="bg-paper">
+      <section className="bg-app text-app-fg">
         <div className="container-site py-20 lg:py-28">
           <Reveal>
             <SectionLabel>{L({ es: 'Cómo trabajamos', en: 'How we work' })}</SectionLabel>
@@ -75,13 +97,13 @@ export default function Home() {
               })}
             </h2>
           </Reveal>
-          <div className="mt-14 grid gap-px border border-fog bg-fog md:grid-cols-3">
+          <div className="mt-14 grid gap-px border border-line bg-line md:grid-cols-3">
             {pillars.map((p, i) => (
               <Reveal key={p.n} delay={i * 0.1}>
-                <div className="h-full bg-paper p-8 lg:p-10">
-                  <div className="text-[11px] font-black tracking-[0.24em] text-mist">{p.n}</div>
+                <div className="h-full bg-app p-8 lg:p-10">
+                  <div className="text-[11px] font-black tracking-[0.24em] text-hint">{p.n}</div>
                   <h3 className="mt-6 text-lg font-black tracking-tight">{L(p.title)}</h3>
-                  <p className="mt-4 text-sm leading-relaxed text-slatey">{L(p.text)}</p>
+                  <p className="mt-4 text-sm leading-relaxed text-muted">{L(p.text)}</p>
                 </div>
               </Reveal>
             ))}
@@ -89,18 +111,15 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-ink text-paper">
+      <section className="band">
         <div className="container-site py-20 lg:py-28">
           <Reveal>
             <SectionLabel light>{L({ es: 'Unidades de negocio', en: 'Business units' })}</SectionLabel>
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <h2 className="max-w-2xl text-[clamp(1.8rem,4.5vw,3rem)] font-black leading-[1.02] tracking-[-0.03em]">
-                {L({
-                  es: 'Cinco unidades. Un solo ecosistema.',
-                  en: 'Five units. One ecosystem.',
-                })}
+                {L({ es: 'Cinco unidades. Un solo ecosistema.', en: 'Five units. One ecosystem.' })}
               </h2>
-              <p className="max-w-md text-sm leading-relaxed text-mist">
+              <p className="max-w-md text-sm leading-relaxed opacity-75">
                 {L({
                   es: 'Cada unidad ataca una rama específica de la logística y se conecta con las demás cuando el encargo lo exige.',
                   en: 'Each unit owns a specific logistics branch and connects with the others when the job demands it.',
@@ -117,22 +136,22 @@ export default function Home() {
             <Reveal delay={0.35}>
               <Link
                 to="/servicios"
-                className="group flex h-full min-h-[280px] flex-col justify-between border border-paper/25 p-8 transition-colors hover:border-paper"
+                className="group flex h-full min-h-[280px] flex-col justify-between border border-current/25 p-8 transition-colors hover:border-current"
               >
-                <span className="text-[11px] font-black tracking-[0.24em] text-mist">06</span>
+                <span className="text-[11px] font-black tracking-[0.24em] opacity-60">06</span>
                 <div>
                   <h3 className="text-lg font-black uppercase tracking-[0.06em]">
                     {L({ es: 'Integración total', en: 'Full integration' })}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-mist">
+                  <p className="mt-3 text-sm leading-relaxed opacity-75">
                     {L({
                       es: 'Descubre cómo las unidades se articulan en operaciones cruzadas.',
                       en: 'See how the units come together in cross operations.',
                     })}
                   </p>
                   <span className="mt-6 inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.18em]">
-                    {L({ es: 'Ver servicios', en: 'View services' })}
-                    <span className="transition-transform duration-300 group-hover:translate-x-1.5">→</span>
+                    {L(ui.common.viewServicesShort)}
+                    <span className="transition-transform duration-300 group-hover:translate-x-1.5" aria-hidden="true">→</span>
                   </span>
                 </div>
               </Link>
@@ -141,25 +160,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="overflow-hidden bg-paper">
-        <div className="border-y border-fog">
-          <div className="flex w-max animate-marquee gap-12 py-5">
+      <section className="overflow-hidden bg-app">
+        <div className="border-y border-line">
+          <div className="flex w-max animate-marquee gap-12 py-5" aria-hidden="true">
             {[0, 1].map((k) => (
               <div key={k} className="flex gap-12">
-                {[
-                  'MEHD TUJO',
-                  'WHOLESALES',
-                  'TUJO GO',
-                  'TUJO FOOD',
-                  'INTERNATIONAL',
-                  'CADENA DE FRÍO',
-                  'ÚLTIMA MILLA',
-                  'BODEGAS',
-                  'PUERTOS',
-                  'TRUEQUE',
-                ].map((w) => (
-                  <span key={w + k} className="whitespace-nowrap text-sm font-black uppercase tracking-[0.3em] text-fog">
-                    {w}
+                {marqueeWords.map((w) => (
+                  <span key={w.es + k} className="whitespace-nowrap text-sm font-black uppercase tracking-[0.3em] text-hint">
+                    {L(w)}
                   </span>
                 ))}
               </div>
@@ -168,19 +176,27 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-paper">
+      <section className="bg-app text-app-fg">
         <div className="container-site grid items-center gap-12 py-20 lg:grid-cols-2 lg:gap-20 lg:py-28">
           <Reveal>
             <div className="relative">
-              <img src={images.team} alt="" className="aspect-[4/3] w-full object-cover img-gray" />
+              <img
+                src={images.team}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                width={1400}
+                height={2099}
+                className="aspect-[4/3] w-full object-cover img-gray"
+              />
               <motion.div
                 initial={{ opacity: 0, scale: 0.96 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2, duration: 0.6 }}
-                className="absolute -bottom-6 -right-4 border border-ink bg-paper p-6 sm:-right-8"
+                className="absolute -bottom-6 -right-4 border border-app-fg bg-app p-6 sm:-right-8"
               >
-                <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-mist">
+                <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-hint">
                   {L({ es: 'Sede', en: 'Headquarters' })}
                 </div>
                 <div className="mt-1 text-lg font-black tracking-tight">Bogotá, Colombia</div>
@@ -195,14 +211,14 @@ export default function Home() {
                 en: 'A company that treats logistics as a living system.',
               })}
             </h2>
-            <p className="mt-6 text-base leading-relaxed text-slatey">
+            <p className="mt-6 text-base leading-relaxed text-muted">
               {L({
                 es: 'Tujo Logistics nace en Bogotá para resolver lo que el manual no contempla: demanda impredecible, tráfico real, inventarios compartidos y decisiones que no pueden esperar. Unimos ciencia, tecnología y criterio operativo para entregar procesos eficientes de punta a punta.',
                 en: 'Tujo Logistics was born in Bogotá to solve what the manual never covers: unpredictable demand, real traffic, shared inventories and decisions that cannot wait. We combine science, technology and operational judgment to deliver end-to-end efficient processes.',
               })}
             </p>
             <Link to="/nosotros" className="btn-outline mt-9">
-              {L({ es: 'Conocer la empresa', en: 'About the company' })}
+              {L(ui.common.aboutCompany)}
             </Link>
           </Reveal>
         </div>

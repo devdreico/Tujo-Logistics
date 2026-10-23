@@ -3,7 +3,7 @@ import Reveal, { SectionLabel } from '../components/Reveal'
 import AppMockup from '../components/AppMockup'
 import RateSimulator from '../components/RateSimulator'
 import CTABanner from '../components/CTABanner'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageMeta from '../hooks/usePageMeta'
 import { useLang } from '../i18n/LangContext'
 import { images } from '../data/units'
 
@@ -40,7 +40,7 @@ const features = [
 
 export default function TujoGo() {
   const { L } = useLang()
-  usePageTitle('Tujo Go')
+  usePageMeta({ title: 'Tujo Go', description: 'Envíos entre usuarios, trueque y tarifas mínimas justas. Simulador incluido.', path: '/tujo-go' })
 
   return (
     <>
@@ -56,7 +56,7 @@ export default function TujoGo() {
         primaryCta={{ to: '/rastreo', label: { es: 'Probar rastreo', en: 'Try tracking' } }}
       />
 
-      <section className="bg-paper">
+      <section className="bg-app">
         <div className="container-site grid items-center gap-14 py-20 lg:grid-cols-2 lg:gap-20 lg:py-28">
           <Reveal>
             <SectionLabel>{L({ es: 'La app', en: 'The app' })}</SectionLabel>
@@ -66,7 +66,7 @@ export default function TujoGo() {
                 en: 'One app for society’s natural logistics.',
               })}
             </h2>
-            <p className="mt-6 text-base leading-relaxed text-slatey">
+            <p className="mt-6 text-base leading-relaxed text-muted">
               {L({
                 es: 'Tujo Go delimita restricciones y recomendaciones ultra específicas para cada intercambio: qué se puede mover, cómo se protege, quién califica a quién y cómo se resuelve un desacuerdo. Estabilidad donde antes había improvisación.',
                 en: 'Tujo Go sets ultra-specific restrictions and recommendations for each exchange: what can move, how it is protected, who rates whom and how disputes are resolved. Stability where there used to be improvisation.',
@@ -74,9 +74,9 @@ export default function TujoGo() {
             </p>
             <ul className="mt-8 grid gap-4 sm:grid-cols-2">
               {features.map((f, i) => (
-                <li key={i} className="border border-fog p-5">
+                <li key={i} className="border border-line p-5">
                   <div className="text-sm font-black tracking-tight">{L(f.title)}</div>
-                  <p className="mt-2 text-sm leading-relaxed text-slatey">{L(f.text)}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{L(f.text)}</p>
                 </li>
               ))}
             </ul>
@@ -102,7 +102,7 @@ export default function TujoGo() {
         </div>
       </section>
 
-      <section className="bg-ink text-paper">
+      <section className="band">
         <div className="container-site py-20 lg:py-28">
           <Reveal>
             <SectionLabel light>{L({ es: 'Tarifas', en: 'Fares' })}</SectionLabel>
@@ -112,7 +112,7 @@ export default function TujoGo() {
                 en: 'The minimum quota is born from debate, not a closed table.',
               })}
             </h2>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-mist">
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-hint">
               {L({
                 es: 'Los usuarios argumentan y median la cuota mínima por kilómetro recorrido en moto, carro o a pie. Paquetes pequeños de menos de 2.5 kg mantienen tarifas mínimas según el medio de transporte. Simula aquí:',
                 en: 'Users argue and mediate the minimum fare per kilometer by motorcycle, car or on foot. Small packages under 2.5 kg keep mode-based minimum fares. Simulate here:',

@@ -2,7 +2,7 @@ import HeroSection from '../components/HeroSection'
 import SplitSection from '../components/SplitSection'
 import Reveal, { SectionLabel } from '../components/Reveal'
 import CTABanner from '../components/CTABanner'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageMeta from '../hooks/usePageMeta'
 import { useLang } from '../i18n/LangContext'
 import { images } from '../data/units'
 
@@ -39,7 +39,7 @@ const pillars = [
 
 export default function Wholesales() {
   const { L } = useLang()
-  usePageTitle('Tujo Wholesales')
+  usePageMeta({ title: 'Tujo Wholesales', description: 'Distribución mayorista, inventario en bodegas y despacho a transportistas.', path: '/wholesales' })
 
   return (
     <>
@@ -83,10 +83,10 @@ export default function Wholesales() {
               { n: '04', t: { es: 'Despacho', en: 'Dispatch' }, d: { es: 'Entrega al transportista y rastreo.', en: 'Handoff to carrier and tracking.' } },
             ].map((s, i) => (
               <Reveal key={s.n} delay={i * 0.08}>
-                <div className="h-full border border-ink bg-paper p-6">
+                <div className="h-full border border-ink bg-app p-6">
                   <div className="text-[11px] font-black tracking-[0.24em]">{s.n}</div>
                   <div className="mt-4 text-sm font-black tracking-tight">{L(s.t)}</div>
-                  <div className="mt-2 text-sm leading-relaxed text-slatey">{L(s.d)}</div>
+                  <div className="mt-2 text-sm leading-relaxed text-muted">{L(s.d)}</div>
                 </div>
               </Reveal>
             ))}
@@ -94,7 +94,7 @@ export default function Wholesales() {
         </div>
       </section>
 
-      <section className="bg-ink text-paper">
+      <section className="band">
         <div className="container-site py-20 lg:py-28">
           <Reveal>
             <div className="max-w-3xl">
@@ -105,7 +105,7 @@ export default function Wholesales() {
                   en: 'Full stock visibility, zero dock surprises.',
                 })}
               </h2>
-              <p className="mt-6 text-base leading-relaxed text-mist">
+              <p className="mt-6 text-base leading-relaxed text-hint">
                 {L({
                   es: 'Tableros de existencias, alertas de reposición y conciliación continua entre bodega, transportista y comprador. El mayorista moderno se maneja con datos tan bien como con paletas.',
                   en: 'Stock dashboards, replenishment alerts and continuous reconciliation between warehouse, carrier and buyer. The modern wholesaler runs on data as well as pallets.',

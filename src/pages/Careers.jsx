@@ -1,10 +1,11 @@
 import HeroSection from '../components/HeroSection'
 import Reveal, { SectionLabel } from '../components/Reveal'
 import CTABanner from '../components/CTABanner'
-import usePageTitle from '../hooks/usePageTitle'
-import { useLang } from '../i18n/LangContext'
+import usePageMeta from '../hooks/usePageMeta'
+import { ui, useLang } from '../i18n/LangContext'
 import { jobs } from '../data/content'
 import { images } from '../data/units'
+import { mailtoLink } from '../data/contact'
 
 const culture = [
   {
@@ -32,7 +33,14 @@ const culture = [
 
 export default function Careers() {
   const { L } = useLang()
-  usePageTitle(L({ es: 'Trabaja con nosotros', en: 'Careers' }))
+  usePageMeta({
+    title: L({ es: 'Trabaja con nosotros', en: 'Careers' }),
+    description: L({
+      es: 'Vacantes en Tujo Logistics Bogotá: operaciones, cadena de frío y growth. Cultura de sistemas y criterio.',
+      en: 'Tujo Logistics Bogotá openings: operations, cold chain and growth. A culture of systems and judgment.',
+    }),
+    path: '/careers',
+  })
 
   return (
     <>
@@ -46,7 +54,7 @@ export default function Careers() {
         }}
       />
 
-      <section className="bg-paper">
+      <section className="bg-app">
         <div className="container-site py-20 lg:py-28">
           <Reveal>
             <SectionLabel>{L({ es: 'Cultura', en: 'Culture' })}</SectionLabel>
@@ -54,12 +62,12 @@ export default function Careers() {
               {L({ es: 'Cómo trabajamos aquí', en: 'How we work here' })}
             </h2>
           </Reveal>
-          <div className="mt-12 grid gap-px border border-fog bg-fog md:grid-cols-3">
+          <div className="mt-12 grid gap-px border border-line bg-line md:grid-cols-3">
             {culture.map((c, i) => (
               <Reveal key={i} delay={i * 0.08}>
-                <div className="h-full bg-paper p-8">
+                <div className="h-full bg-app p-8">
                   <h3 className="text-base font-black tracking-tight">{L(c.title)}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-slatey">{L(c.text)}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">{L(c.text)}</p>
                 </div>
               </Reveal>
             ))}
@@ -67,7 +75,7 @@ export default function Careers() {
         </div>
       </section>
 
-      <section className="bg-ink text-paper">
+      <section className="band">
         <div className="container-site py-20 lg:py-28">
           <Reveal>
             <SectionLabel light>{L({ es: 'Vacantes abiertas', en: 'Open roles' })}</SectionLabel>
@@ -75,21 +83,27 @@ export default function Careers() {
               {L({ es: 'Únete al equipo', en: 'Join the team' })}
             </h2>
           </Reveal>
-          <div className="mt-12 space-y-px bg-paper/15">
+          <div className="mt-12 space-y-px bg-app/15">
             {jobs.map((j, i) => (
               <Reveal key={j.id} delay={i * 0.07}>
-                <div className="flex flex-col gap-6 bg-ink p-8 lg:flex-row lg:items-center lg:justify-between">
+                <div className="flex flex-col gap-6 bg-band p-8 lg:flex-row lg:items-center lg:justify-between">
                   <div className="max-w-2xl">
                     <h3 className="text-lg font-black tracking-tight">{L(j.title)}</h3>
-                    <div className="mt-2 flex flex-wrap gap-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-mist">
+                    <div className="mt-2 flex flex-wrap gap-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-hint">
                       <span>{L(j.area)}</span>
                       <span aria-hidden="true">·</span>
                       <span>{L(j.type)}</span>
                     </div>
-                    <p className="mt-4 text-sm leading-relaxed text-mist">{L(j.description)}</p>
+                    <p className="mt-4 text-sm leading-relaxed opacity-80">{L(j.description)}</p>
                   </div>
-                  <a href="mailto:hola@tujologistics.com" className="btn-light shrink-0">
-                    {L({ es: 'Postularme', en: 'Apply' })}
+                  <a
+                    href={mailtoLink({
+                      subject: `Postulación — ${L(j.title)}`,
+                      body: `Puesto: ${L(j.title)}\nÁrea: ${L(j.area)}\n\nHola, quiero postularme.`,
+                    })}
+                    className="btn-light shrink-0"
+                  >
+                    {L(ui.common.apply)}
                   </a>
                 </div>
               </Reveal>

@@ -2,18 +2,28 @@ import HeroSection from '../components/HeroSection'
 import Accordion from '../components/Accordion'
 import Reveal, { SectionLabel } from '../components/Reveal'
 import CTABanner from '../components/CTABanner'
-import usePageTitle from '../hooks/usePageTitle'
+import JsonLd, { faqLd } from '../components/JsonLd'
+import usePageMeta from '../hooks/usePageMeta'
 import { useLang } from '../i18n/LangContext'
 import { faqItems } from '../data/content'
 
 export default function Faq() {
-  const { L } = useLang()
-  usePageTitle(L({ es: 'Preguntas frecuentes', en: 'FAQ' }))
+  const { L, lang } = useLang()
+  usePageMeta({
+    title: L({ es: 'Preguntas frecuentes', en: 'FAQ' }),
+    description: L({
+      es: 'Preguntas frecuentes sobre Tujo Logistics: unidades, tarifas de Tujo Go, cadena de frío, alianzas e internacional.',
+      en: 'Tujo Logistics FAQ: units, Tujo Go fares, cold chain, partnerships and international freight.',
+    }),
+    path: '/faq',
+  })
 
   const items = faqItems.map((f) => ({ q: L(f.q), a: L(f.a) }))
 
   return (
     <>
+      <JsonLd data={faqLd(items)} />
+
       <HeroSection
         label={{ es: 'FAQ', en: 'FAQ' }}
         title={{ es: 'Preguntas frecuentes.', en: 'Frequently asked questions.' }}
@@ -23,7 +33,7 @@ export default function Faq() {
         }}
       />
 
-      <section className="bg-paper">
+      <section className="bg-app text-app-fg">
         <div className="container-site py-16 lg:py-24">
           <Reveal>
             <SectionLabel>{L({ es: 'General', en: 'General' })}</SectionLabel>
@@ -31,6 +41,9 @@ export default function Faq() {
           <div className="mt-6 max-w-4xl">
             <Accordion items={items} />
           </div>
+          <p className="mt-8 text-[12px] text-hint" aria-live="polite">
+            {lang === 'en' ? `${items.length} questions` : `${items.length} preguntas`}
+          </p>
         </div>
       </section>
 

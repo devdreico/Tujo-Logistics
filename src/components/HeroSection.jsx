@@ -3,10 +3,6 @@ import { Link } from 'react-router-dom'
 import { SectionLabel } from './Reveal'
 import { useLang } from '../i18n/LangContext'
 
-/**
- * Hero: white monumental or dark band variant.
- * title may be a string or bilingual {es,en}
- */
 export default function HeroSection({
   label,
   title,
@@ -23,15 +19,27 @@ export default function HeroSection({
   const center = align === 'center'
 
   return (
-    <section className={`relative overflow-hidden ${dark ? 'bg-ink text-paper' : 'bg-paper text-ink'}`}>
+    <section
+      className={`relative overflow-hidden ${dark ? 'band on-band' : 'bg-app text-app-fg'}`}
+    >
       {image && (
         <div className="pointer-events-none absolute inset-0">
           <img
             src={image}
             alt=""
+            loading="eager"
+            decoding="async"
+            width={1400}
+            height={933}
             className={`h-full w-full object-cover img-gray ${dark ? 'opacity-25' : 'opacity-[0.14]'}`}
           />
-          <div className={`absolute inset-0 ${dark ? 'bg-gradient-to-r from-ink via-ink/85 to-ink/40' : 'bg-gradient-to-r from-paper via-paper/90 to-paper/50'}`} />
+          <div
+            className={`absolute inset-0 ${
+              dark
+                ? 'bg-gradient-to-r from-band via-band/90 to-band/40'
+                : 'bg-gradient-to-r from-app via-app/90 to-app/50'
+            }`}
+          />
         </div>
       )}
       <div className={`container-site relative ${tall ? 'py-28 lg:py-40' : 'py-20 lg:py-32'} ${center ? 'text-center' : ''}`}>
@@ -46,19 +54,35 @@ export default function HeroSection({
             {titleText}
           </h1>
           {subtitle && (
-            <p className={`mt-7 max-w-2xl text-base leading-relaxed sm:text-lg ${dark ? 'text-mist' : 'text-slatey'} ${center ? 'mx-auto' : ''}`}>
+            <p
+              className={`mt-7 max-w-2xl text-base leading-relaxed opacity-80 sm:text-lg ${center ? 'mx-auto' : ''}`}
+            >
               {L(subtitle)}
             </p>
           )}
           {(primaryCta || secondaryCta) && (
             <div className={`mt-10 flex flex-wrap gap-4 ${center ? 'justify-center' : ''}`}>
               {primaryCta && (
-                <Link to={primaryCta.to} className={dark ? 'btn-light' : 'btn-primary'}>
+                <Link
+                  to={primaryCta.to}
+                  className={
+                    dark
+                      ? 'inline-flex items-center justify-center gap-2 border border-current px-6 py-3.5 text-sm font-semibold tracking-wide transition-all hover:bg-current/10'
+                      : 'btn-primary'
+                  }
+                >
                   {L(primaryCta.label)}
                 </Link>
               )}
               {secondaryCta && (
-                <Link to={secondaryCta.to} className={dark ? 'btn-light' : 'btn-outline'}>
+                <Link
+                  to={secondaryCta.to}
+                  className={
+                    dark
+                      ? 'inline-flex items-center justify-center gap-2 border border-current/40 px-6 py-3.5 text-sm font-semibold tracking-wide opacity-80 transition-all hover:opacity-100'
+                      : 'btn-outline'
+                  }
+                >
                   {L(secondaryCta.label)}
                 </Link>
               )}
@@ -66,7 +90,7 @@ export default function HeroSection({
           )}
         </motion.div>
       </div>
-      <div className={`h-px w-full ${dark ? 'bg-paper/15' : 'bg-fog'}`} />
+      <div className={`h-px w-full ${dark ? 'bg-current/20' : 'bg-line'}`} />
     </section>
   )
 }

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import HeroSection from '../components/HeroSection'
 import Reveal, { SectionLabel } from '../components/Reveal'
 import CTABanner from '../components/CTABanner'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageMeta from '../hooks/usePageMeta'
 import { useLang } from '../i18n/LangContext'
 import { images, units } from '../data/units'
 
@@ -61,17 +61,21 @@ const flow = [
 
 export default function Servicios() {
   const { L } = useLang()
-  usePageTitle(L({ es: 'Servicios', en: 'Services' }))
+  usePageMeta({
+    title: L({ es: 'Servicios', en: 'Services' }),
+    description: L({
+      es: 'Capacidades logísticas integradas de Tujo Logistics: red, cadena de frío, inventario, marketplace, última milla e internacional.',
+      en: 'Tujo Logistics integrated capabilities: network, cold chain, inventory, marketplace, last mile and international.',
+    }),
+    path: '/servicios',
+  })
 
   return (
     <>
       <HeroSection
         image={images.truck}
         label={{ es: 'Servicios', en: 'Services' }}
-        title={{
-          es: 'Capacidades logísticas integradas.',
-          en: 'Integrated logistics capabilities.',
-        }}
+        title={{ es: 'Capacidades logísticas integradas.', en: 'Integrated logistics capabilities.' }}
         subtitle={{
           es: 'No vendemos piezas sueltas: diseñamos el sistema completo y lo operamos a través de nuestras unidades especializadas.',
           en: 'We do not sell loose parts: we design the full system and operate it through our specialized units.',
@@ -79,7 +83,7 @@ export default function Servicios() {
         primaryCta={{ to: '/contacto', label: { es: 'Solicitar diagnóstico', en: 'Request diagnosis' } }}
       />
 
-      <section className="bg-paper">
+      <section className="bg-app text-app-fg">
         <div className="container-site py-20 lg:py-28">
           <Reveal>
             <SectionLabel>{L({ es: 'Capacidades', en: 'Capabilities' })}</SectionLabel>
@@ -90,15 +94,15 @@ export default function Servicios() {
               })}
             </h2>
           </Reveal>
-          <div className="mt-14 grid gap-px border border-fog bg-fog sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-14 grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
             {capabilities.map((c, i) => (
               <Reveal key={i} delay={(i % 3) * 0.08}>
-                <div className="h-full bg-paper p-8">
-                  <div className="text-[11px] font-black tracking-[0.24em] text-mist">
+                <div className="h-full bg-app p-8">
+                  <div className="text-[11px] font-black tracking-[0.24em] text-hint">
                     {String(i + 1).padStart(2, '0')}
                   </div>
                   <h3 className="mt-5 text-base font-black tracking-tight">{L(c.title)}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-slatey">{L(c.text)}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">{L(c.text)}</p>
                 </div>
               </Reveal>
             ))}
@@ -106,7 +110,7 @@ export default function Servicios() {
         </div>
       </section>
 
-      <section className="bg-cloud">
+      <section className="bg-cloud text-app-fg">
         <div className="container-site py-20 lg:py-28">
           <Reveal>
             <SectionLabel>{L({ es: 'Metodología', en: 'Methodology' })}</SectionLabel>
@@ -117,11 +121,11 @@ export default function Servicios() {
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {flow.map((f, i) => (
               <Reveal key={f.n} delay={i * 0.08}>
-                <div className="relative h-full border border-ink bg-paper p-6">
+                <div className="relative h-full border border-app-fg bg-app p-6">
                   <div className="text-[11px] font-black tracking-[0.24em]">{f.n}</div>
                   <div className="mt-4 text-sm font-bold tracking-tight">{L(f.label)}</div>
                   {i < flow.length - 1 && (
-                    <span className="absolute -right-3 top-1/2 hidden h-px w-6 bg-ink lg:block" aria-hidden="true" />
+                    <span className="absolute -right-3 top-1/2 hidden h-px w-6 bg-app-fg lg:block" aria-hidden="true" />
                   )}
                 </div>
               </Reveal>
@@ -130,24 +134,21 @@ export default function Servicios() {
         </div>
       </section>
 
-      <section className="bg-ink text-paper">
+      <section className="band">
         <div className="container-site py-20 lg:py-28">
           <Reveal>
             <SectionLabel light>{L({ es: 'Unidades operativas', en: 'Operating units' })}</SectionLabel>
             <h2 className="max-w-2xl text-[clamp(1.8rem,4.5vw,2.8rem)] font-black leading-[1.05] tracking-[-0.03em]">
-              {L({
-                es: 'Las capacidades viven en unidades concretas.',
-                en: 'Capabilities live in concrete units.',
-              })}
+              {L({ es: 'Las capacidades viven en unidades concretas.', en: 'Capabilities live in concrete units.' })}
             </h2>
           </Reveal>
-          <div className="mt-12 grid gap-px bg-paper/15 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="mt-12 grid gap-px bg-current/15 sm:grid-cols-2 lg:grid-cols-5">
             {units.map((u, i) => (
               <Reveal key={u.id} delay={i * 0.06}>
-                <Link to={u.to} className="group flex h-full flex-col bg-ink p-6 transition-colors hover:bg-coal">
-                  <span className="text-[10px] font-black tracking-[0.24em] text-mist">{u.index}</span>
-                  <span className="mt-4 text-sm font-black uppercase tracking-[0.08em]">{L(u.name)}</span>
-                  <span className="mt-2 text-[11px] uppercase tracking-[0.14em] text-mist">{L(u.tagline)}</span>
+                <Link to={u.to} className="group flex h-full flex-col bg-band p-6 transition-colors hover:bg-band-soft">
+                  <span className="text-[10px] font-black tracking-[0.24em] opacity-60">{u.index}</span>
+                  <span className="mt-4 text-sm font-black uppercase tracking-[0.08em]">{L(u.shortName || u.name)}</span>
+                  <span className="mt-2 text-[11px] uppercase tracking-[0.14em] opacity-70">{L(u.tagline)}</span>
                   <span className="mt-6 text-[11px] font-bold uppercase tracking-[0.16em]">
                     {L({ es: 'Explorar →', en: 'Explore →' })}
                   </span>

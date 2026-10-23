@@ -3,7 +3,7 @@ import SplitSection from '../components/SplitSection'
 import Reveal, { SectionLabel } from '../components/Reveal'
 import StatsBar from '../components/StatsBar'
 import CTABanner from '../components/CTABanner'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageMeta from '../hooks/usePageMeta'
 import { useLang } from '../i18n/LangContext'
 import { images } from '../data/units'
 
@@ -40,7 +40,7 @@ const services = [
 
 export default function Mehdtujo() {
   const { L } = useLang()
-  usePageTitle('MEHD Tujo')
+  usePageMeta({ title: 'MEHD Tujo', description: 'Logística de alimentos, cadena de frío y abastecimiento de cocinas.', path: '/mehd-tujo' })
 
   return (
     <>
@@ -75,7 +75,7 @@ export default function Mehdtujo() {
         image={images.food}
       />
 
-      <section className="bg-paper">
+      <section className="bg-app">
         <div className="container-site py-20 lg:py-28">
           <Reveal>
             <SectionLabel>{L({ es: 'Servicios', en: 'Services' })}</SectionLabel>
@@ -83,12 +83,12 @@ export default function Mehdtujo() {
               {L({ es: 'Lo que operamos', en: 'What we operate' })}
             </h2>
           </Reveal>
-          <div className="mt-12 grid gap-px border border-fog bg-fog sm:grid-cols-2">
+          <div className="mt-12 grid gap-px border border-line bg-line sm:grid-cols-2">
             {services.map((s, i) => (
               <Reveal key={i} delay={i * 0.07}>
-                <div className="h-full bg-paper p-8">
+                <div className="h-full bg-app p-8">
                   <h3 className="text-base font-black tracking-tight">{L(s.title)}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-slatey">{L(s.text)}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">{L(s.text)}</p>
                 </div>
               </Reveal>
             ))}
@@ -96,7 +96,7 @@ export default function Mehdtujo() {
         </div>
       </section>
 
-      <section className="bg-ink text-paper">
+      <section className="band">
         <div className="container-site py-20 lg:py-28">
           <Reveal>
             <div className="max-w-3xl">
@@ -145,10 +145,10 @@ export default function Mehdtujo() {
               },
             ].map((p, i) => (
               <Reveal key={p.n} delay={i * 0.08}>
-                <div className="border-t border-paper/30 pt-6">
-                  <div className="text-[11px] font-black tracking-[0.24em] text-mist">{p.n}</div>
+                <div className="border-t border-current/30 pt-6">
+                  <div className="text-[11px] font-black tracking-[0.24em] text-hint">{p.n}</div>
                   <h3 className="mt-4 text-base font-black tracking-tight">{L(p.t)}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-mist">{L(p.d)}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-hint">{L(p.d)}</p>
                 </div>
               </Reveal>
             ))}

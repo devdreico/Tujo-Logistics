@@ -3,7 +3,7 @@ import Reveal, { SectionLabel } from '../components/Reveal'
 import AppMockup from '../components/AppMockup'
 import SplitSection from '../components/SplitSection'
 import CTABanner from '../components/CTABanner'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageMeta from '../hooks/usePageMeta'
 import { useLang } from '../i18n/LangContext'
 import { images } from '../data/units'
 
@@ -40,7 +40,7 @@ const strategies = [
 
 export default function TujoFood() {
   const { L } = useLang()
-  usePageTitle('Tujo Food')
+  usePageMeta({ title: 'Tujo Food', description: 'App de comida con restaurantes afiliados y logística local maximizada.', path: '/tujo-food' })
 
   return (
     <>
@@ -56,7 +56,7 @@ export default function TujoFood() {
         primaryCta={{ to: '/contacto', label: { es: 'Afiliar restaurante', en: 'Affiliate restaurant' } }}
       />
 
-      <section className="bg-paper">
+      <section className="bg-app">
         <div className="container-site grid items-center gap-14 py-20 lg:grid-cols-2 lg:gap-20 lg:py-28">
           <Reveal delay={0.08} className="lg:order-1">
             <AppMockup
@@ -83,7 +83,7 @@ export default function TujoFood() {
                 en: 'Food that arrives the way it left the kitchen.',
               })}
             </h2>
-            <p className="mt-6 text-base leading-relaxed text-slatey">
+            <p className="mt-6 text-base leading-relaxed text-muted">
               {L({
                 es: 'Tujo Food aplica estrategias diferentes a Tujo Go porque la comida exige otra logística: ventanas más cortas, packaging sensible y horarios que se alinean con el hambre de la ciudad, no con el capricho del algoritmo.',
                 en: 'Tujo Food applies different strategies than Tujo Go because food demands different logistics: shorter windows, sensitive packaging and schedules that align with the city’s hunger, not an algorithm’s whim.',
@@ -93,7 +93,7 @@ export default function TujoFood() {
               {strategies.map((s, i) => (
                 <div key={i} className="border-l-2 border-ink pl-5">
                   <div className="text-sm font-black tracking-tight">{L(s.title)}</div>
-                  <p className="mt-1 text-sm leading-relaxed text-slatey">{L(s.text)}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-muted">{L(s.text)}</p>
                 </div>
               ))}
             </div>

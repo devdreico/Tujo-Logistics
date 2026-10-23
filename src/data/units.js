@@ -22,6 +22,7 @@ export const images = {
   warehouse,
 }
 
+/** Single source of truth for business units (nav, footer, pages, form). */
 export const units = [
   {
     id: 'mehd',
@@ -75,7 +76,8 @@ export const units = [
     id: 'intl',
     to: '/international',
     index: '05',
-    name: { es: 'Tujo International', en: 'Tujo International' },
+    name: { es: 'Tujo International Service', en: 'Tujo International Service' },
+    shortName: { es: 'International', en: 'International' },
     tagline: { es: 'Transporte premium global', en: 'Premium global freight' },
     description: {
       es: 'Servicio propio de transporte de mercancía internacional: puertos, aviones y logística premium en un solo departamento.',
@@ -84,3 +86,15 @@ export const units = [
     image: port,
   },
 ]
+
+export function getUnit(id) {
+  return units.find((u) => u.id === id)
+}
+
+export function unitOptions() {
+  return [
+    { value: '', label: { es: 'Selecciona una unidad', en: 'Select a unit' } },
+    ...units.map((u) => ({ value: u.id, label: u.name })),
+    { value: 'general', label: { es: 'General / Corporativo', en: 'General / Corporate' } },
+  ]
+}

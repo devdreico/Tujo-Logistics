@@ -84,8 +84,8 @@ export const jobs = [
     area: { es: 'Tujo Food · Bogotá', en: 'Tujo Food · Bogotá' },
     type: { es: 'Híbrido', en: 'Hybrid' },
     description: {
-      en: 'Grow the restaurant network and optimize local delivery density. Analytical profile with marketplace or foodtech experience.',
       es: 'Haz crecer la red de restaurantes y optimiza la densidad de entrega local. Perfil analítico con experiencia en marketplace o foodtech.',
+      en: 'Grow the restaurant network and optimize local delivery density. Analytical profile with marketplace or foodtech experience.',
     },
   },
 ]

@@ -2,13 +2,20 @@ import HeroSection from '../components/HeroSection'
 import TrackingDemo from '../components/TrackingDemo'
 import Reveal, { SectionLabel } from '../components/Reveal'
 import CTABanner from '../components/CTABanner'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageMeta from '../hooks/usePageMeta'
 import { useLang } from '../i18n/LangContext'
 import { images } from '../data/units'
 
 export default function Rastreo() {
   const { L } = useLang()
-  usePageTitle(L({ es: 'Rastreo de envíos', en: 'Shipment tracking' }))
+  usePageMeta({
+    title: L({ es: 'Rastreo de envíos', en: 'Shipment tracking' }),
+    description: L({
+      es: 'Demo de rastreo de envíos Tujo Logistics: estados del paquete en tiempo simulado.',
+      en: 'Tujo Logistics shipment tracking demo: simulated package states.',
+    }),
+    path: '/rastreo',
+  })
 
   return (
     <>
@@ -22,7 +29,7 @@ export default function Rastreo() {
         }}
       />
 
-      <section className="bg-paper">
+      <section className="bg-app">
         <div className="container-site grid gap-12 py-16 lg:grid-cols-12 lg:py-24">
           <Reveal className="lg:col-span-7">
             <TrackingDemo />
@@ -66,14 +73,14 @@ export default function Rastreo() {
                   },
                 },
               ].map((s, i) => (
-                <div key={i} className="border-t border-fog pt-5">
+                <div key={i} className="border-t border-line pt-5">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-ink text-[10px] font-bold text-paper">
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-app-fg text-[10px] font-bold text-app">
                       {i + 1}
                     </span>
                     <span className="text-sm font-black tracking-tight">{L(s.t)}</span>
                   </div>
-                  <p className="mt-2 pl-9 text-sm leading-relaxed text-slatey">{L(s.d)}</p>
+                  <p className="mt-2 pl-9 text-sm leading-relaxed text-muted">{L(s.d)}</p>
                 </div>
               ))}
             </div>

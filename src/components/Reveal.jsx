@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import { useLang } from '../i18n/LangContext'
 
 /** Fade-up reveal on scroll */
 export default function Reveal({ children, delay = 0, className = '', y = 28 }) {
@@ -19,26 +18,20 @@ export default function Reveal({ children, delay = 0, className = '', y = 28 }) 
 export function SectionLabel({ children, light = false }) {
   return (
     <div className={light ? 'label-caps-light mb-5' : 'label-caps mb-5'}>
-      <span className="mr-3 inline-block h-px w-8 align-middle" style={{ background: light ? '#a3a3a3' : '#0a0a0a' }} />
+      <span
+        className="mr-3 inline-block h-px w-8 align-middle"
+        style={{ background: light ? 'currentColor' : 'currentColor', opacity: light ? 0.45 : 1 }}
+      />
       {children}
     </div>
   )
 }
 
-/** Section wrapper: white or ink band */
+/** Section wrapper: app surface or band */
 export function Band({ dark = false, className = '', children, id }) {
   return (
-    <section
-      id={id}
-      className={`${dark ? 'bg-ink text-paper' : 'bg-paper text-ink'} ${className}`}
-    >
+    <section id={id} className={`${dark ? 'band text-band-fg' : 'bg-app text-app-fg'} ${className}`}>
       {children}
     </section>
   )
-}
-
-/** Simple bilingual static text helper re-export */
-export function T({ es, en }) {
-  const { L } = useLang()
-  return L({ es, en })
 }

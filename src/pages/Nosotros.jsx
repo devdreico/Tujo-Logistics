@@ -2,7 +2,7 @@ import HeroSection from '../components/HeroSection'
 import Reveal, { SectionLabel } from '../components/Reveal'
 import SplitSection from '../components/SplitSection'
 import CTABanner from '../components/CTABanner'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageMeta from '../hooks/usePageMeta'
 import { useLang } from '../i18n/LangContext'
 import { images } from '../data/units'
 
@@ -74,7 +74,14 @@ const timeline = [
 
 export default function Nosotros() {
   const { L } = useLang()
-  usePageTitle(L({ es: 'Nosotros', en: 'About' }))
+  usePageMeta({
+    title: L({ es: 'Nosotros', en: 'About' }),
+    description: L({
+      es: 'Tujo Logistics: empresa bogotana de sistemas logísticos para entornos caóticos. Historia, valores y metodología.',
+      en: 'Tujo Logistics: Bogotá logistics systems company for chaotic environments. Story, values and methodology.',
+    }),
+    path: '/nosotros',
+  })
 
   return (
     <>
@@ -86,7 +93,7 @@ export default function Nosotros() {
           en: 'Complex organization for complex realities.',
         }}
         subtitle={{
-          es: 'SomosTujo Logistics: una casa de sistemas logísticos nacida en Bogotá, construida para entornos donde el caos es la norma y no la excepción.',
+          es: 'Somos Tujo Logistics: una casa de sistemas logísticos nacida en Bogotá, construida para entornos donde el caos es la norma y no la excepción.',
           en: 'We are Tujo Logistics: a logistics systems house born in Bogotá, built for environments where chaos is the norm, not the exception.',
         }}
       />
@@ -124,7 +131,7 @@ export default function Nosotros() {
         image={images.city}
       />
 
-      <section className="bg-ink text-paper">
+      <section className="band">
         <div className="container-site py-20 lg:py-28">
           <Reveal>
             <SectionLabel light>{L({ es: 'Valores', en: 'Values' })}</SectionLabel>
@@ -132,12 +139,12 @@ export default function Nosotros() {
               {L({ es: 'Lo que no negociamos', en: 'What we do not negotiate' })}
             </h2>
           </Reveal>
-          <div className="mt-14 grid gap-px bg-paper/15 sm:grid-cols-2">
+          <div className="mt-14 grid gap-px bg-current/15 sm:grid-cols-2">
             {values.map((v, i) => (
               <Reveal key={i} delay={i * 0.08}>
-                <div className="h-full bg-ink p-8 lg:p-10">
+                <div className="h-full bg-band p-8 lg:p-10">
                   <h3 className="text-base font-black tracking-tight">{L(v.title)}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-mist">{L(v.text)}</p>
+                  <p className="mt-3 text-sm leading-relaxed opacity-75">{L(v.text)}</p>
                 </div>
               </Reveal>
             ))}
@@ -145,7 +152,7 @@ export default function Nosotros() {
         </div>
       </section>
 
-      <section className="bg-paper">
+      <section className="bg-app text-app-fg">
         <div className="container-site py-20 lg:py-28">
           <Reveal>
             <SectionLabel>{L({ es: 'Trayectoria', en: 'Timeline' })}</SectionLabel>
@@ -153,14 +160,14 @@ export default function Nosotros() {
               {L({ es: 'Hitos del sistema', en: 'System milestones' })}
             </h2>
           </Reveal>
-          <div className="mt-14 space-y-0 border-l border-fog pl-8 sm:pl-12">
+          <div className="mt-14 space-y-0 border-l border-line pl-8 sm:pl-12">
             {timeline.map((t, i) => (
               <Reveal key={t.year} delay={i * 0.08}>
                 <div className="relative pb-12 last:pb-0">
-                  <span className="absolute -left-[41px] top-2 h-3 w-3 rounded-full border-2 border-ink bg-paper sm:-left-[57px]" />
-                  <div className="text-[11px] font-black tracking-[0.24em] text-mist">{t.year}</div>
+                  <span className="absolute -left-[41px] top-2 h-3 w-3 rounded-full border-2 border-app-fg bg-app sm:-left-[57px]" />
+                  <div className="text-[11px] font-black tracking-[0.24em] text-hint">{t.year}</div>
                   <h3 className="mt-2 text-lg font-black tracking-tight">{L(t.title)}</h3>
-                  <p className="mt-2 max-w-xl text-sm leading-relaxed text-slatey">{L(t.text)}</p>
+                  <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">{L(t.text)}</p>
                 </div>
               </Reveal>
             ))}

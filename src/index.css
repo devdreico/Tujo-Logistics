@@ -1,49 +1,73 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
 
+  /* Semantic surfaces — flip under .dark */
+  --color-app: #ffffff;
+  --color-app-fg: #0a0a0a;
+  --color-cloud: #f5f5f5;
+  --color-fog: #e5e5e5;
+  --color-band: #0a0a0a;
+  --color-band-fg: #fafafa;
+  --color-band-soft: #171717;
+  --color-muted: #525252;
+  --color-hint: #737373;
+  --color-line: #e5e5e5;
+  --color-accent: #0a0a0a;
+  --color-on-accent: #ffffff;
+
+  /* Legacy aliases used across existing components */
+  --color-paper: #ffffff;
   --color-ink: #0a0a0a;
   --color-coal: #171717;
   --color-graphite: #262626;
   --color-slatey: #525252;
-  --color-mist: #a3a3a3;
-  --color-fog: #e5e5e5;
-  --color-cloud: #f5f5f5;
-  --color-paper: #ffffff;
+  --color-mist: #737373;
 
   --animate-marquee: marquee 32s linear infinite;
   --animate-pulse-soft: pulse-soft 3.2s ease-in-out infinite;
   --animate-float: float 6s ease-in-out infinite;
 
   @keyframes marquee {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-50%);
-    }
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
 
   @keyframes pulse-soft {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.45;
-    }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
   }
 
   @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
+}
+
+/* Dark mode: full monochrome invert of the design tokens */
+.dark {
+  --color-app: #0a0a0a;
+  --color-app-fg: #fafafa;
+  --color-cloud: #141414;
+  --color-fog: #2a2a2a;
+  --color-band: #f5f5f5;
+  --color-band-fg: #0a0a0a;
+  --color-band-soft: #e5e5e5;
+  --color-muted: #a3a3a3;
+  --color-hint: #8a8a8a;
+  --color-line: #2a2a2a;
+  --color-accent: #fafafa;
+  --color-on-accent: #0a0a0a;
+
+  --color-paper: #0a0a0a;
+  --color-ink: #fafafa;
+  --color-coal: #1c1c1c;
+  --color-graphite: #e5e5e5;
+  --color-slatey: #a3a3a3;
+  --color-mist: #8a8a8a;
 }
 
 @layer base {
@@ -51,23 +75,71 @@
     scroll-behavior: smooth;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
   body {
-    @apply bg-paper text-ink font-sans antialiased;
+    @apply bg-app text-app-fg font-sans antialiased;
     text-rendering: optimizeLegibility;
   }
 
   ::selection {
-    background: #0a0a0a;
-    color: #ffffff;
+    background: var(--color-app-fg);
+    color: var(--color-app);
   }
 
   :focus-visible {
-    outline: 2px solid #0a0a0a;
+    outline: 2px solid currentColor;
     outline-offset: 3px;
   }
 
   .img-gray {
     filter: grayscale(1) contrast(1.08);
+  }
+
+  .dark .img-gray {
+    filter: grayscale(1) contrast(1.02) brightness(0.9);
+  }
+
+  /* Logo color handling across light/dark and band contexts */
+  .tujo-logo {
+    filter: none;
+  }
+
+  .on-band .tujo-logo {
+    filter: invert(1);
+  }
+
+  .dark .tujo-logo {
+    filter: invert(1);
+  }
+
+  .dark .on-band .tujo-logo {
+    filter: none;
+  }
+
+  .skip-link {
+    @apply sr-only;
+  }
+
+  .skip-link:focus {
+    @apply not-sr-only;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 100;
+    @apply bg-app text-app-fg border border-app-fg px-4 py-2 text-sm font-semibold;
   }
 }
 
@@ -77,43 +149,51 @@
   }
 
   .label-caps {
-    @apply text-[11px] font-semibold uppercase tracking-[0.28em] text-slatey;
+    @apply text-[11px] font-semibold uppercase tracking-[0.28em] text-muted;
   }
 
   .label-caps-light {
-    @apply text-[11px] font-semibold uppercase tracking-[0.28em] text-mist;
+    @apply text-[11px] font-semibold uppercase tracking-[0.28em] opacity-70;
+  }
+
+  .band {
+    @apply bg-band text-band-fg;
+  }
+
+  .band-soft {
+    @apply bg-band-soft text-band-fg;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 bg-ink px-6 py-3.5 text-sm font-semibold tracking-wide text-paper transition-all duration-300 hover:bg-graphite hover:tracking-[0.06em] disabled:opacity-40;
+    @apply inline-flex items-center justify-center gap-2 bg-accent px-6 py-3.5 text-sm font-semibold tracking-wide text-on-accent transition-all duration-300 hover:opacity-85 hover:tracking-[0.06em] disabled:opacity-40;
   }
 
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 border border-ink bg-transparent px-6 py-3.5 text-sm font-semibold tracking-wide text-ink transition-all duration-300 hover:bg-ink hover:text-paper;
+    @apply inline-flex items-center justify-center gap-2 border border-app-fg bg-transparent px-6 py-3.5 text-sm font-semibold tracking-wide text-app-fg transition-all duration-300 hover:bg-app-fg hover:text-app;
   }
 
   .btn-light {
-    @apply inline-flex items-center justify-center gap-2 border border-paper/40 bg-transparent px-6 py-3.5 text-sm font-semibold tracking-wide text-paper transition-all duration-300 hover:bg-paper hover:text-ink;
+    @apply inline-flex items-center justify-center gap-2 border border-current bg-transparent px-6 py-3.5 text-sm font-semibold tracking-wide opacity-90 transition-all duration-300 hover:opacity-100 hover:bg-current/10;
   }
 
   .card {
-    @apply border border-fog bg-paper transition-all duration-300 hover:border-ink;
+    @apply border border-line bg-app transition-all duration-300 hover:border-app-fg;
   }
 
   .field {
-    @apply w-full border border-fog bg-paper px-4 py-3.5 text-sm text-ink placeholder:text-mist transition-colors duration-200 focus:border-ink focus:outline-none;
+    @apply w-full border border-line bg-app px-4 py-3.5 text-sm text-app-fg placeholder:text-hint transition-colors duration-200 focus:border-app-fg focus:outline-none;
   }
 
   .prose-tujo {
-    @apply text-base leading-relaxed text-slatey;
+    @apply text-base leading-relaxed text-muted;
   }
 
   .prose-tujo h2 {
-    @apply mb-4 mt-12 text-2xl font-bold tracking-tight text-ink;
+    @apply mb-4 mt-12 text-2xl font-bold tracking-tight text-app-fg;
   }
 
   .prose-tujo h3 {
-    @apply mb-3 mt-8 text-lg font-bold tracking-tight text-ink;
+    @apply mb-3 mt-8 text-lg font-bold tracking-tight text-app-fg;
   }
 
   .prose-tujo p {
@@ -125,6 +205,6 @@
   }
 
   .prose-tujo strong {
-    @apply font-semibold text-ink;
+    @apply font-semibold text-app-fg;
   }
 }

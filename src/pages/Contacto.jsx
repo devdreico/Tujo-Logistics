@@ -1,28 +1,76 @@
 import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import HeroSection from '../components/HeroSection'
 import Reveal, { SectionLabel } from '../components/Reveal'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageMeta from '../hooks/usePageMeta'
 import { useLang } from '../i18n/LangContext'
+import { contact } from '../data/contact'
+import { unitOptions } from '../data/units'
 
-const unitsOptions = [
-  { value: '', label: { es: 'Selecciona una unidad', en: 'Select a unit' } },
-  { value: 'mehd', label: { es: 'MEHD Tujo', en: 'MEHD Tujo' } },
-  { value: 'wholesales', label: { es: 'Tujo Wholesales', en: 'Tujo Wholesales' } },
-  { value: 'go', label: { es: 'Tujo Go', en: 'Tujo Go' } },
-  { value: 'food', label: { es: 'Tujo Food', en: 'Tujo Food' } },
-  { value: 'intl', label: { es: 'International Service', en: 'International Service' } },
-  { value: 'general', label: { es: 'General / Corporativo', en: 'General / Corporate' } },
-]
+const ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY
 
 export default function Contacto() {
   const { L } = useLang()
-  usePageTitle(L({ es: 'Contacto', en: 'Contact' }))
+  const [searchParams] = useSearchParams()
+  const unitParam = searchParams.get('unit') || ''
   const [sent, setSent] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
 
-  const onSubmit = (e) => {
+  usePageMeta({
+    title: L({ es: 'Contacto', en: 'Contact' }),
+    description: L({
+      es: 'Contacta a Tujo Logistics en Bogotá. Formulario, WhatsApp y correo para coordinación logística, alianzas y cotizaciones.',
+      en: 'Contact Tujo Logistics in Bogotá. Form, WhatsApp and email for logistics coordination, partnerships and quotes.',
+    }),
+    path: '/contacto',
+  })
+
+  const onSubmit = async (e) => {
     e.preventDefault()
-    setSent(true)
+    setError('')
+    setSending(true)
+
+    const form = e.currentTarget
+    const data = new FormData(form)
+
+    if (!ACCESS_KEY) {
+      // Fallback: open mail client with prefilled content
+      const subject = encodeURIComponent(`Contacto Tujo Logistics — ${data.get('unit') || 'General'}`)
+      const body = encodeURIComponent(
+        `Nombre: ${data.get('name')}\nEmail: ${data.get('email')}\nWhatsApp: ${data.get('phone') || '—'}\nUnidad: ${data.get('unit')}\n\n${data.get('message')}`,
+      )
+      window.location.href = `mailto:${contact.email}?subject=${subject}&body=${body}`
+      setSending(false)
+      setSent(true)
+      return
+    }
+
+    try {
+      data.append('access_key', ACCESS_KEY)
+      data.append('subject', `Contacto Tujo Logistics — ${data.get('unit') || 'General'}`)
+      data.append('from_name', 'Sitio Tujo Logistics')
+
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(Object.fromEntries(data.entries())),
+      })
+      const json = await res.json()
+      if (!json.success) throw new Error(json.message || 'Error')
+      setSent(true)
+      form.reset()
+    } catch {
+      setError(
+        L({
+          es: 'No pudimos enviar el mensaje. Intenta de nuevo o escríbenos por WhatsApp.',
+          en: 'We could not send the message. Try again or write us on WhatsApp.',
+        }),
+      )
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -36,31 +84,41 @@ export default function Contacto() {
         }}
       />
 
-      <section className="bg-paper">
+      <section className="bg-app text-app-fg">
         <div className="container-site grid gap-14 py-16 lg:grid-cols-12 lg:py-24">
           <Reveal className="lg:col-span-7">
             {sent ? (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="border border-ink bg-cloud p-10"
+                role="status"
+                aria-live="polite"
+                tabIndex={-1}
+                className="border border-app-fg bg-cloud p-10"
               >
                 <div className="label-caps">{L({ es: 'Mensaje recibido', en: 'Message received' })}</div>
                 <h2 className="mt-4 text-2xl font-black tracking-tight">
                   {L({ es: 'Gracias. Te contactaremos pronto.', en: 'Thank you. We will contact you soon.' })}
                 </h2>
-                <p className="mt-4 text-sm leading-relaxed text-slatey">
-                  {L({
-                    es: 'Esta es una demostración del formulario: no se envían datos a un servidor. En producción, tu mensaje llegará al equipo coordinador.',
-                    en: 'This is a form demo: no data is sent to a server. In production your message would reach the coordination team.',
-                  })}
+                <p className="mt-4 text-sm leading-relaxed text-muted">
+                  {ACCESS_KEY
+                    ? L({
+                        es: 'Tu mensaje fue enviado al equipo coordinador de Tujo Logistics.',
+                        en: 'Your message was sent to the Tujo Logistics coordination team.',
+                      })
+                    : L({
+                        es: 'Se abrió tu cliente de correo con el mensaje. Si no ocurrió nada, escríbenos directo a ' +
+                          contact.email,
+                        en: 'Your email client should have opened with the message. If not, write us directly at ' +
+                          contact.email,
+                      })}
                 </p>
                 <button type="button" className="btn-outline mt-8" onClick={() => setSent(false)}>
                   {L({ es: 'Enviar otro', en: 'Send another' })}
                 </button>
               </motion.div>
             ) : (
-              <form onSubmit={onSubmit} className="space-y-5">
+              <form onSubmit={onSubmit} className="space-y-5" noValidate={false}>
                 <SectionLabel>{L({ es: 'Formulario', en: 'Form' })}</SectionLabel>
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
@@ -81,14 +139,21 @@ export default function Contacto() {
                     <label htmlFor="phone" className="label-caps">
                       {L({ es: 'WhatsApp', en: 'WhatsApp' })}
                     </label>
-                    <input id="phone" name="phone" type="tel" className="field mt-3" autoComplete="tel" placeholder="+57 300 000 0000" />
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      className="field mt-3"
+                      autoComplete="tel"
+                      placeholder="+57 300 000 0000"
+                    />
                   </div>
                   <div>
                     <label htmlFor="unit" className="label-caps">
                       {L({ es: 'Unidad de interés', en: 'Unit of interest' })}
                     </label>
-                    <select id="unit" name="unit" required className="field mt-3" defaultValue="">
-                      {unitsOptions.map((o) => (
+                    <select id="unit" name="unit" required className="field mt-3" defaultValue={unitParam}>
+                      {unitOptions().map((o) => (
                         <option key={o.value} value={o.value} disabled={!o.value}>
                           {L(o.label)}
                         </option>
@@ -102,9 +167,25 @@ export default function Contacto() {
                   </label>
                   <textarea id="message" name="message" rows={6} required className="field mt-3" />
                 </div>
-                <button type="submit" className="btn-primary">
-                  {L({ es: 'Enviar mensaje', en: 'Send message' })}
+                {error && (
+                  <p role="alert" className="text-sm font-semibold">{error}</p>
+                )}
+                <button type="submit" className="btn-primary" disabled={sending}>
+                  {sending
+                    ? L({ es: 'Enviando…', en: 'Sending…' })
+                    : L({ es: 'Enviar mensaje', en: 'Send message' })}
                 </button>
+                <p className="text-[12px] text-hint">
+                  {ACCESS_KEY
+                    ? L({
+                        es: 'Al enviar aceptas nuestra política de privacidad.',
+                        en: 'By sending you accept our privacy policy.',
+                      })
+                    : L({
+                        es: 'Configura VITE_WEB3FORMS_ACCESS_KEY en .env para envío directo; sin ella usamos tu cliente de correo.',
+                        en: 'Set VITE_WEB3FORMS_ACCESS_KEY in .env for direct delivery; without it we use your email client.',
+                      })}
+                </p>
               </form>
             )}
           </Reveal>
@@ -113,43 +194,23 @@ export default function Contacto() {
             <SectionLabel>{L({ es: 'Datos', en: 'Details' })}</SectionLabel>
             <div className="mt-2 space-y-8">
               {[
-                {
-                  k: { es: 'Oficina', en: 'Office' },
-                  v: { es: 'Bogotá D.C., Colombia', en: 'Bogotá D.C., Colombia' },
-                },
-                {
-                  k: { es: 'Correo', en: 'Email' },
-                  v: { es: 'hola@tujologistics.com', en: 'hola@tujologistics.com' },
-                },
-                {
-                  k: { es: 'WhatsApp', en: 'WhatsApp' },
-                  v: { es: '+57 300 000 0000', en: '+57 300 000 0000' },
-                },
-                {
-                  k: { es: 'Horario', en: 'Hours' },
-                  v: {
-                    es: 'Lun–Vie · 8:00–18:00 (COT)',
-                    en: 'Mon–Fri · 8:00–18:00 (COT)',
-                  },
-                },
+                { k: { es: 'Oficina', en: 'Office' }, v: contact.address },
+                { k: { es: 'Correo', en: 'Email' }, v: { es: contact.email, en: contact.email } },
+                { k: { es: 'WhatsApp', en: 'WhatsApp' }, v: { es: contact.whatsappDisplay, en: contact.whatsappDisplay } },
+                { k: { es: 'Horario', en: 'Hours' }, v: contact.hours },
                 {
                   k: { es: 'Redes', en: 'Social' },
-                  v: { es: '@tujologistics', en: '@tujologistics' },
+                  v: {
+                    es: contact.social.instagram || contact.social.linkedin || '—',
+                    en: contact.social.instagram || contact.social.linkedin || '—',
+                  },
                 },
               ].map((d, i) => (
-                <div key={i} className="border-t border-fog pt-5">
-                  <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-mist">{L(d.k)}</div>
+                <div key={i} className="border-t border-line pt-5">
+                  <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-hint">{L(d.k)}</div>
                   <div className="mt-2 text-base font-semibold tracking-tight">{L(d.v)}</div>
                 </div>
               ))}
-            </div>
-            <div className="mt-10 border border-fog bg-cloud p-6">
-              <p className="text-[12px] leading-relaxed text-slatey">
-                {L({
-                  es: 'Los datos de contacto mostrados son placeholders profesionales listos para reemplazar con la información oficial.',
-                  en: 'Contact details shown are professional placeholders ready to be replaced with official information.',
-                })}
-              </p>
             </div>
           </Reveal>
         </div>

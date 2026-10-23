@@ -1,8 +1,8 @@
 # Tujo Logistics — Sitio Corporativo
 
-Sitio institucional bilingüe (ES/EN) de **Tujo Logistics**, construido con React + Vite + Tailwind CSS + Framer Motion.
+Sitio institucional bilingüe (ES/EN) de **Tujo Logistics**, con modo claro/oscuro, React + Vite + Tailwind + Framer Motion.
 
-Diseño blanco y negro con escala de grises, tipografía **Montserrat**, animaciones de scroll, header/footer compartidos y 16 rutas.
+Diseño monocromo (blanco/negro + grises), tipografía **Montserrat**, animaciones, 20+ rutas, tests y CI.
 
 ## Unidades de negocio
 
@@ -14,9 +14,11 @@ Diseño blanco y negro con escala de grises, tipografía **Montserrat**, animaci
 | `/tujo-food` | Tujo Food — app de comida y restaurantes afiliados |
 | `/international` | Tujo International Service — flete internacional premium |
 
-## Otras páginas
+## Páginas
 
-`/` Home · `/nosotros` · `/servicios` · `/rastreo` (demo) · `/faq` · `/contacto` · `/aliados` · `/careers` · `/blog` · `/blog/:slug` · `/legal/privacidad` · `/legal/terminos`
+`/` · `/nosotros` · `/servicios` · unidades · `/rastreo` (demo) · `/faq` · `/contacto` · `/aliados` · `/careers` · `/blog` + 9 artículos · `/legal/*` · 404
+
+Redirects de cortesía: `/about`, `/services`, `/tracking`, `/contact`, `/partners`, `/international-service`.
 
 ## Desarrollo
 
@@ -25,18 +27,63 @@ npm install
 npm run dev
 ```
 
-## Build y deploy
+## Comandos
 
 ```bash
-npm run build     # genera dist/
-npm run preview   # previsualiza el build
+npm run build     # producción
+npm run preview   # sirve dist/
+npm run lint      # oxlint
+npm run test      # vitest watch
+npm run test:run  # vitest CI
+npm run check     # lint + test + build
 ```
 
-Compatible con **Netlify** y **Vercel** (SPA rewrite incluido en `netlify.toml` y `vercel.json`).
+## Formulario de contacto (Web3Forms)
 
-## Notas
+1. Regístrate gratis en [web3forms.com](https://web3forms.com) con tu correo.
+2. Copia `.env.example` → `.env` y pega la access key:
 
-- Selector de idioma ES/EN en el header (persistido en `localStorage`).
-- Logo en `public/tujo-logo.png` y `assets/tujo-logo.png`.
-- Imágenes stock grayscale en `src/assets/img/`.
-- Los datos de contacto y formularios son placeholders profesionales (demo front-end sin backend).
+```
+VITE_WEB3FORMS_ACCESS_KEY=tu-key
+```
+
+Sin la key, el formulario abre el cliente de correo con el mensaje prellenado (fallback mailto).
+
+## Contacto y redes
+
+Edita **un solo archivo**: `src/data/contact.js` (correo, WhatsApp, dirección, horario, redes).
+
+## Tema claro/oscuro
+
+Toggle en el header. Persistencia en `localStorage` (`tujo-theme`). Respeta `prefers-color-scheme` al primer load.
+
+## SEO
+
+- Meta description + OG/Twitter/canonical por ruta (`usePageMeta`)
+- `public/sitemap.xml`, `public/robots.txt`
+- JSON-LD: Organization, WebSite, FAQPage, Article
+
+## PWA
+
+`public/site.webmanifest` + apple-touch-icon. Monocromo.
+
+## CI
+
+GitHub Actions (`.github/workflows/ci.yml`): lint + tests + build en push/PR a `main`.
+
+## Deploy
+
+Compatible con **Netlify** y **Vercel** (SPA rewrite + headers de cache/seguridad).
+
+## Estructura
+
+```
+src/
+  components/   Header, Footer, Hero, simulador, mockups, SEO…
+  pages/        18 rutas
+  data/         units, contact, blogPosts, content (faq/jobs/partners)
+  hooks/        usePageMeta, usePageTitle
+  i18n/         LangContext ES/EN + tema
+  utils/        format (números, COP, fechas)
+  test/         Vitest + Testing Library
+```

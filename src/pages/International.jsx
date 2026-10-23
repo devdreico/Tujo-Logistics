@@ -2,7 +2,7 @@ import HeroSection from '../components/HeroSection'
 import Reveal, { SectionLabel } from '../components/Reveal'
 import SplitSection from '../components/SplitSection'
 import CTABanner from '../components/CTABanner'
-import usePageTitle from '../hooks/usePageTitle'
+import usePageMeta from '../hooks/usePageMeta'
 import { useLang } from '../i18n/LangContext'
 import { images } from '../data/units'
 
@@ -27,7 +27,7 @@ const modes = [
 
 export default function International() {
   const { L } = useLang()
-  usePageTitle('Tujo International Service')
+  usePageMeta({ title: 'Tujo International Service', description: 'Transporte internacional premium: puertos, aviones y aduanas.', path: '/international' })
 
   return (
     <>
@@ -47,11 +47,11 @@ export default function International() {
         primaryCta={{ to: '/contacto', label: { es: 'Cotizar flete', en: 'Quote freight' } }}
       />
 
-      <section className="bg-paper">
+      <section className="bg-app">
         <div className="container-site grid gap-8 py-20 lg:grid-cols-2 lg:py-28">
           {modes.map((m, i) => (
             <Reveal key={i} delay={i * 0.1}>
-              <article className="group h-full border border-fog">
+              <article className="group h-full border border-line">
                 <div className="relative aspect-[16/9] overflow-hidden">
                   <img
                     src={m.image}
@@ -59,11 +59,11 @@ export default function International() {
                     className="h-full w-full object-cover img-gray transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent" />
-                  <h3 className="absolute bottom-5 left-6 text-2xl font-black uppercase tracking-[0.06em] text-paper">
+                  <h3 className="absolute bottom-5 left-6 text-2xl font-black uppercase tracking-[0.06em] text-white">
                     {L(m.title)}
                   </h3>
                 </div>
-                <p className="p-6 text-sm leading-relaxed text-slatey">{L(m.text)}</p>
+                <p className="p-6 text-sm leading-relaxed text-muted">{L(m.text)}</p>
               </article>
             </Reveal>
           ))}
@@ -116,7 +116,7 @@ export default function International() {
               })}
             </h2>
           </Reveal>
-          <div className="mt-12 grid gap-px border border-ink bg-ink sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid gap-px border border-current/15 bg-current/15 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { r: { es: 'Norteamérica', en: 'North America' }, d: { es: 'Corredores aéreos prioritarios.', en: 'Priority air corridors.' } },
               { r: { es: 'Europa', en: 'Europe' }, d: { es: 'Marítimo consolidado y aéreo.', en: 'Consolidated sea and air.' } },
@@ -126,7 +126,7 @@ export default function International() {
               <Reveal key={i} delay={i * 0.07}>
                 <div className="h-full bg-cloud p-7">
                   <div className="text-base font-black uppercase tracking-[0.08em]">{L(c.r)}</div>
-                  <p className="mt-3 text-sm leading-relaxed text-slatey">{L(c.d)}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">{L(c.d)}</p>
                 </div>
               </Reveal>
             ))}
