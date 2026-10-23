@@ -242,16 +242,16 @@ export default function Header() {
 
           <button
             type="button"
-            className="flex h-10 w-10 items-center justify-center border border-line xl:hidden"
+            className="flex h-10 w-10 items-center justify-center border border-line bg-white xl:hidden"
             onClick={() => setOpen(true)}
             aria-label={L(ui.a11y.openMenu)}
             aria-expanded={open}
             aria-controls="mobile-menu"
           >
             <span className="flex flex-col gap-1.5" aria-hidden="true">
-              <span className="block h-px w-5 bg-app-fg" />
-              <span className="block h-px w-5 bg-app-fg" />
-              <span className="block h-px w-3.5 bg-app-fg" />
+              <span className="block h-px w-5 bg-black" />
+              <span className="block h-px w-5 bg-black" />
+              <span className="block h-px w-3.5 bg-black" />
             </span>
           </button>
         </div>
